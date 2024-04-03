@@ -12,12 +12,11 @@ Welcome to the Cabook! 🎉 This project is designed to revolutionize the way us
 4. *Shortest Time Calculation*: We'll find the quickest way for you! ⏱
 5. *Cab Pricing*: Choose from 5 different cabs with unique pricing. No overlaps allowed! 💵🚕
 6. *Estimated Cost*: Know the estimated cost upfront! 💰
-7. *Booking Tracking*: Track your booking like a boss! 🕵‍♂
-8. *Cabs and Pricing Management*: Edit and view cabs and their pricing effortlessly. ✏🚖
 
 ### 🤔 Assumptions
 
-- No login/signup required as only admins will access the app. 🔐
+-There are only 5 cabs with different pricing
+- There are predefined locations with predefined routes
 - Frontend developed as a Single Page Application (SPA). 🌐
 
 ## 💻 Technologies Used
