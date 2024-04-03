@@ -25,10 +25,15 @@ Welcome to the Cabook! 🎉 This project is designed to revolutionize the way us
   - The above route is preprogrammed in the system with edges telling us the minimum time to reach from node to node . We have used dijkstra algorithm to find the shortest time and the price according to the    
     cabType selected
   - Confirmation mail will be send to your email,confirming your source and destination and the price with the shortest estimated time
+    
     ![WhatsApp Image 2024-04-04 at 03 12 38_ce4458f2](https://github.com/Rajlaxmisingh/scaler/assets/96018289/031a23eb-4a2a-416f-a279-274052f5e98a)
+    
   -No rides overlap eachother as we have total of 5 cars , each of its kind , we cannot afford overlaps between two rides of the same cabs
+
     ![image](https://github.com/Rajlaxmisingh/scaler/assets/96018289/9c429fd1-08d9-40c6-abef-0e841290e290)
+  
   - Log of all the bookings is stored in the database
+    
     ![image](https://github.com/Rajlaxmisingh/scaler/assets/96018289/d9788081-442b-4c6a-8475-ba24150a6430)
 
 
