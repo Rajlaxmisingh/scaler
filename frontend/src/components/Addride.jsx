@@ -6,9 +6,11 @@ const LoginForm = () => {
   const [destination, setDestination] = useState('');
   const [cabType, setCabType] = useState('');
 
+  const [price, setPrice] = useState('');
+  const [shortestTime, setShortestTime] = useState('');
+  const [message, setMessage] = useState('');
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
     const formData = {
       email,
       source,
@@ -17,21 +19,21 @@ const LoginForm = () => {
     };
 
     try {
-      const response = await axios.post('http://localhost:1000/api/v1/add', formData)
-      .then(response => {
-        console.log('Response from backend:', response.data);
-      })
-      .catch(error => {
-        console.error('Error sending data to backend:', error);
-      });
+      const response = await axios.post('http://localhost:1000/api/v1/add', formData);
+      console.log(response);
+      setPrice(response.data.price);
+      setShortestTime(response.data.shortestTime);
+      setMessage(response.data.message);
     }
     catch (error) {
       console.error('Error sending data to backend:', error);
+      setMessage(error.response.data.message);
     }
   };
 
   return (
-    <div className=" d-flex justify-content-center align-items-center">
+    <div className=" d-flex justify-content-center flex-column w-100 mx-auto">
+      <section className='form1'>
     <form onSubmit={handleSubmit}>
       <div className="mb-3">
         <label htmlFor="email" className="form-label">Email</label>
@@ -98,10 +100,29 @@ const LoginForm = () => {
           <option value="B">B - Rs. 20/min</option>
           <option value="C">C - Rs. 70/min</option>
           <option value="D">D - Rs. 4/min</option>
+          <option value="E">D - Rs. 50/min</option>
         </select>
       </div>
-      <button type="submit" className="btn btn-primary" >Book</button>
+      <button
+    type="submit"
+    className="btn btn-primary"
+    style={{
+        padding: '10px 20px', 
+        fontSize: '16px', 
+        backgroundColor: 'black',
+        color: 'white', 
+        border: 'none'
+    }}
+>
+    Book
+</button>
     </form>
+    </section>
+    <section className='booking-result'>
+    {message && <p>{message}</p>}
+    {price && <p>Total Price: {price}</p>}
+    {shortestTime && <p>Shortest Time: {shortestTime}</p>}
+    </section>
     </div>
   );
 };

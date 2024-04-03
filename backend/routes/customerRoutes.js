@@ -5,23 +5,23 @@ const graph = require('../graph');
 const rates = {
     "A": 10,
     "B": 20,
-    "C": 30,
-    "D": 40,
+    "C": 70,
+    "D": 4,
     "E": 50
 };
 const cors = require('cors');
 
 
 router.use(cors({
-    origin: 'https://scaler-gamma.vercel.app', // Replace with the actual URL of your frontend application
+    //origin: '*',
+    origin: 'https://scaler-gamma.vercel.app', 
     methods: ["POST","GET"],
     credentials: true
   }
 ));
 
 function getFixedRateForCabType(cabType) {
-    
-    
+
     return rates[cabType] || 0; // Return 0 if cabType is not found
 }
 
@@ -33,6 +33,10 @@ function getFixedRateForCabType(cabType) {
 router.post("/add", async (req, res) => {
     try {
         const { email, source, destination, cabType } = req.body;
+        if(source === destination){
+            console.log("Cannot book cabs for the same source and destination.");
+            return res.status(400).json({ message: "Cannot book cabs for the same source and destination." });
+        }
         const { distances } = graph.dijkstra(source);
         console.log(req.body);
         const shortestTime = distances[destination];
@@ -46,8 +50,11 @@ router.post("/add", async (req, res) => {
         const existingRides = await customerModel.find({ cabType, startTime: { $lt: endTime }, endTime: { $gt: startTime } });
         
         if (existingRides.length > 0) {
-            return res.status(400).json({ message: "Overlap detected. Cannot create ride." });
+            console.log("The cab you're trying to book is already booked. Please try another cab.");
+            return res.status(400).json({ message: "The cab you're trying to book is already booked. Please try again with another cab." });
+            
         }
+        
         
         console.log("Shortest Time:", shortestTime);
         console.log("Fixed Rate:", fixedRate);
@@ -79,12 +86,15 @@ router.post("/add", async (req, res) => {
             from: 'rajlaxmisingh456@gmail.com',
             to: email,
             subject: 'Ride Confirmation',
-            text: 'Backend done!'
+            text: `Dear Customer, We are happy to confirm your booking from ${source} to ${destination}.
+The estimated distance for this journey is ${shortestTime} mins and the total amount payable is Rs.${Price}
+Regards,
+Team Cabook`
         };
         
         await transporter.sendMail(mailOptions);
     
-        res.status(200).json({ message: "Ride booked successfully. Confirmation email sent." });
+        res.status(200).json({ message: "Ride booked successfully. Confirmation email sent." , price: Price , shortestTime: shortestTime});
     } 
      catch (error) {
         console.log(error);
