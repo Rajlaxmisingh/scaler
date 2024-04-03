@@ -2,46 +2,86 @@ const router=require("express").Router();
 const customerModel=require("../models/customerModel");
 const nodemailer = require("nodemailer");
 const graph = require('../graph'); 
-
+const rates = {
+    "A": 10,
+    "B": 20,
+    "C": 30,
+    "D": 40,
+    "E": 50
+};
   
+function getFixedRateForCabType(cabType) {
+    
+    
+    return rates[cabType] || 0; // Return 0 if cabType is not found
+}
 
+router.use(cors(
+    {
+        origin: ["https://cabook-git-main-raj-laxmi-singhs-projects.vercel.app/"],
+        methods: ["POST","GET"],
+        credentials: true
+    }
+))
+
+router.get('/',(req,res) =>{
+    res.json("hello");
+})
 //POST REQUEST 
 
 router.post("/add", async (req, res) => {
     try {
-        const { email,source, destination ,cabType, startTime, endTime } = req.body;
+        const { email, source, destination, cabType } = req.body;
+        const { distances } = graph.dijkstra(source);
+        
+        const shortestTime = distances[destination];
+        const fixedRate = getFixedRateForCabType(cabType);
+        const Price = shortestTime * fixedRate;
+        
+        const startTime = new Date();
+        const endTime = new Date(startTime.getTime() + shortestTime * 60000);
+        
         const existingRides = await customerModel.find({ cabType, startTime: { $lt: endTime }, endTime: { $gt: startTime } });
+        
         if (existingRides.length > 0) {
             return res.status(400).json({ message: "Overlap detected. Cannot create ride." });
         }
-
-        // console.log(source);
-        const { distances } = graph.dijkstra(source);
-        // console.log(distances);
-        // Find the shortest time to reach the destination
-        const shortestTime = distances[destination];
-        // endTime=startTime+shortestTime;
-        const newCustomer = new customerModel(req.body);
+        
+        console.log("Shortest Time:", shortestTime);
+        console.log("Fixed Rate:", fixedRate);
+        console.log("Price:", Price);
+        
+        const newCustomerData = {
+            email,
+            source,
+            destination,
+            cabType,
+            Price,
+            startTime,
+            endTime
+        };
+    
+        const newCustomer = new customerModel(newCustomerData);
         await newCustomer.save();
-        // res.status(200).json({ shortestTime });
        
+        // Send confirmation email
         let transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
               user: 'rajlaxmisingh456@gmail.com',
               pass: 'vfrp uule nwxs gljm'
             }
-          });
+        });
           
-          let mailOptions = {
+        let mailOptions = {
             from: 'rajlaxmisingh456@gmail.com',
             to: email,
-            subject: 'Sending Email using Node.js',
-            text: 'That was easy!'
-          };
-        // Send email
+            subject: 'Ride Confirmation',
+            text: 'Backend done!'
+        };
+        
         await transporter.sendMail(mailOptions);
-
+    
         res.status(200).json({ message: "Ride booked successfully. Confirmation email sent." });
     } 
      catch (error) {
