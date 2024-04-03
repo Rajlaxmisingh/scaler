@@ -19,6 +19,18 @@ app.use("/api/v1",custRoute);
 //     next();
 // });
 
+app.use(cors(
+    {
+        origin: ["https://scaler-gamma.vercel.app/"],
+        methods: ["POST","GET"],
+        credentials: true
+    }
+))
+
+app.get('/',(req,res) =>{
+    res.json("hello");
+})
+
 app.listen(1000,()=>{
     console.log("SERVER STARTED");
 });

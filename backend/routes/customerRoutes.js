@@ -16,17 +16,9 @@ function getFixedRateForCabType(cabType) {
     return rates[cabType] || 0; // Return 0 if cabType is not found
 }
 
-router.use(cors(
-    {
-        origin: ["https://cabook.vercel.app/"],
-        methods: ["POST","GET"],
-        credentials: true
-    }
-))
 
-router.get('/',(req,res) =>{
-    res.json("hello");
-})
+
+
 //POST REQUEST 
 
 router.post("/add", async (req, res) => {
