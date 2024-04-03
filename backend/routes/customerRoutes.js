@@ -18,7 +18,7 @@ function getFixedRateForCabType(cabType) {
 
 router.use(cors(
     {
-        origin: ["https://cabook-git-main-raj-laxmi-singhs-projects.vercel.app/"],
+        origin: ["https://cabook.vercel.app/"],
         methods: ["POST","GET"],
         credentials: true
     }
