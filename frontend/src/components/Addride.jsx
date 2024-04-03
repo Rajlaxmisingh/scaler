@@ -17,7 +17,7 @@ const LoginForm = () => {
     };
 
     try {
-      const response = await axios.post('https://scaler-gamma.vercel.app/api/v1/add', formData)
+      const response = await axios.post('https://scaler-gamma.vercel.app/add', formData)
       .then(response => {
         console.log('Response from backend:', response.data);
       })

@@ -13,7 +13,7 @@ const cors = require('cors');
 
 
 router.use(cors({
-    origin: '*', // Replace with the actual URL of your frontend application
+    origin: 'https://scaler-gamma.vercel.app', // Replace with the actual URL of your frontend application
     methods: ["POST","GET"],
     credentials: true
   }
