@@ -6,17 +6,29 @@ const LoginForm = () => {
   const [destination, setDestination] = useState('');
   const [cabType, setCabType] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle form submission logic here
-    console.log(`Email: ${email}, Source: ${source}, Destination: ${destination}, Cab Type: ${cabType}`);
-  };
+    const formData = {
+      email,
+      source,
+      destination,
+      cabType
+    };
 
-  const submit = async () =>{
-    await axios
-    .post("https://localhost:1000/api/v1/add", email, source, destination, cabType)
-    .then(res=>console.log(res));
-  }
+    try {
+      const response = await axios.post('https://scaler-gamma.vercel.app/api/v1/add', formData)
+      .then(response => {
+        console.log('Response from backend:', response.data);
+      })
+      .catch(error => {
+        console.error('Error sending data to backend:', error);
+      });
+    }
+    catch (error) {
+      console.error('Error sending data to backend:', error);
+    }
+  };
 
   return (
     <div className=" d-flex justify-content-center align-items-center">
@@ -44,12 +56,12 @@ const LoginForm = () => {
           required
         >
           <option value="" disabled>Select Destination</option>
-          <option value="Ajmer">Ajmer</option>
-          <option value="Bangalore">Bangalore</option>
-          <option value="Calcutta">Calcutta</option>
-          <option value="Dehradun">Dehradun</option>
-          <option value="Etawah">Etawah</option>
-          <option value="Faridabad">Faridabad</option>
+          <option value="ajmer">Ajmer</option>
+          <option value="bangalore">Bangalore</option>
+          <option value="calcutta">Calcutta</option>
+          <option value="dehradun">Dehradun</option>
+          <option value="etawah">Etawah</option>
+          <option value="faridabad">Faridabad</option>
         </select>
       </div>
       <div className="mb-3">
@@ -63,12 +75,12 @@ const LoginForm = () => {
           required
         >
           <option value="" disabled>Select Destination</option>
-          <option value="Ajmer">Ajmer</option>
-          <option value="Bangalore">Bangalore</option>
-          <option value="Calcutta">Calcutta</option>
-          <option value="Dehradun">Dehradun</option>
-          <option value="Etawah">Etawah</option>
-          <option value="Faridabad">Faridabad</option>
+          <option value="ajmer">Ajmer</option>
+          <option value="bangalore">Bangalore</option>
+          <option value="calcutta">Calcutta</option>
+          <option value="dehradun">Dehradun</option>
+          <option value="etawah">Etawah</option>
+          <option value="faridabad">Faridabad</option>
         </select>
       </div>
       <div className="mb-3">

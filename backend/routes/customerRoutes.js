@@ -9,7 +9,16 @@ const rates = {
     "D": 40,
     "E": 50
 };
-  
+const cors = require('cors');
+
+
+router.use(cors({
+    origin: '*', // Replace with the actual URL of your frontend application
+    methods: ["POST","GET"],
+    credentials: true
+  }
+));
+
 function getFixedRateForCabType(cabType) {
     
     
@@ -25,8 +34,9 @@ router.post("/add", async (req, res) => {
     try {
         const { email, source, destination, cabType } = req.body;
         const { distances } = graph.dijkstra(source);
-        
+        console.log(req.body);
         const shortestTime = distances[destination];
+        console.log(shortestTime);
         const fixedRate = getFixedRateForCabType(cabType);
         const Price = shortestTime * fixedRate;
         
